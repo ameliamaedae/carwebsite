@@ -1,4 +1,8 @@
 node('Jenkins-Agent') {
+    stage('Check Docker') {
+        sh 'docker --version'
+    }
+
     stage('Source Code Clone (Git)') {
         checkout scm
     }
