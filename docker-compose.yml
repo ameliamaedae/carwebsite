@@ -1,0 +1,7 @@
+services:
+  apache:
+    image: ameliamae/amalan_car_site
+    ports:
+      - '80:80'
+    volumes:
+      - ./:/usr/local/apache2/htdocs
