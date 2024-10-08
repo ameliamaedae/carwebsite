@@ -4,6 +4,7 @@ node('Jenkins-Agent') {
     }
 
     stage('Build-Tag') {
+        // Use the docker object only within this stage
         def app = docker.build('ameliamae/amalan_car_site')
     }
 
