@@ -1,4 +1,4 @@
-node('Jenkins-Agent') {
+node('Milano-Agent') {
     stage('Check Docker') {
         sh 'docker --version'
     }
