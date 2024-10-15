@@ -1,25 +1,63 @@
-node('Milano-Agent') {
-    stage('Check Docker') {
-        sh 'docker --version'
+node('Milano-Agent')
+{
+ 
+def app
+stage('Cloning Git')
+{
+    /* Let's make sure we have the repository cloned to our workspace */
+    checkout scm
+}
+ 
+stage('Build-and-Tag')
+{
+    /* This builds the actual image; 
+         * This is synonymous to docker build on the command line */
+    app = docker.build('ameliamae/amalan_car_website')
+}
+ 
+stage('Post-to-dockerhub')
+{
+    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_credentials')
+    {
+        app.push('latest')
     }
-
-    stage('Source Code Clone (Git)') {
-        checkout scm
+}
+ 
+stage('Deploy')
+{
+    sh "docker-compose down"
+    sh "docker-compose up -d"
+}
+ 
+}
+{
+ 
+def app
+stage('Cloning Git')
+{
+    /* Let's make sure we have the repository cloned to our workspace */
+    checkout scm
+}
+ 
+stage('Build-and-Tag')
+{
+    /* This builds the actual image; 
+         * This is synonymous to docker build on the command line */
+    app = docker.build('ameliamae/amalan_car_website')
+}
+ 
+stage('Post-to-dockerhub')
+{
+    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_credentials')
+    {
+        app.push('latest')
     }
-
-    stage('Build-Tag') {
-        // Use the docker object only within this stage
-        app = docker.build('ameliamae/amalan_car_site')
-    }
-
-    stage('Push-To-DockerHub') {
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_credentials') {
-            app.push('latest')
-        }
-    }
-
-    stage('Deploy') {
-        sh "docker compose down"
-        sh "docker compose up -d"
-    }
+}
+ 
+stage('Deploy')
+{
+    sh "docker-compose down"
+    sh "docker-compose up -d"
+}
+ 
 }
